@@ -1,16 +1,3 @@
-# =============================================================================
-# Pipeline CI/CD DevSecOps - miniprojet-DevOps
-# =============================================================================
-# Ce pipeline exécute automatiquement:
-# - Lint PHP (vérification syntaxe)
-# - Tests unitaires PHPUnit
-# - Analyse SAST avec SonarCloud
-# - Analyse de sécurité supplémentaire
-# 
-# @author Ismail KHLIF, Islem BARGUI
-# @version 2.0
-# =============================================================================
-
 name: CI/CD DevSecOps Pipeline
 
 on:
@@ -28,38 +15,38 @@ jobs:
   # Job 1: Lint PHP - Vérification de la syntaxe
   # ===========================================================================
   php-lint:
-    name: 🔍 PHP Lint
+    name:  PHP Lint
     runs-on: ubuntu-latest
     
     steps:
-      - name: 📥 Checkout du code
+      - name: Checkout du code
         uses: actions/checkout@v4
         
-      - name: 🐘 Configuration PHP ${{ env.PHP_VERSION }}
+      - name: Configuration PHP ${{ env.PHP_VERSION }}
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ env.PHP_VERSION }}
           tools: php-parallel-lint
           
-      - name: ✅ Vérification syntaxe PHP
+      - name: Vérification syntaxe PHP
         run: |
-          echo "🔍 Vérification de la syntaxe PHP..."
+          echo "Vérification de la syntaxe PHP..."
           find . -name "*.php" -not -path "./vendor/*" -print0 | xargs -0 -n1 php -l
-          echo "✅ Aucune erreur de syntaxe détectée!"
+          echo " Aucune erreur de syntaxe détectée!"
 
   # ===========================================================================
   # Job 2: Tests Unitaires PHPUnit
   # ===========================================================================
   phpunit-tests:
-    name: 🧪 Tests PHPUnit
+    name:  Tests PHPUnit
     runs-on: ubuntu-latest
     needs: php-lint
     
     steps:
-      - name: 📥 Checkout du code
+      - name: Checkout du code
         uses: actions/checkout@v4
         
-      - name: 🐘 Configuration PHP ${{ env.PHP_VERSION }}
+      - name: Configuration PHP ${{ env.PHP_VERSION }}
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ env.PHP_VERSION }}
@@ -67,7 +54,7 @@ jobs:
           coverage: xdebug
           tools: composer, phpunit
           
-      - name: 📦 Cache Composer
+      - name:  Cache Composer
         uses: actions/cache@v3
         with:
           path: vendor
@@ -75,7 +62,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-
             
-      - name: 📥 Installation des dépendances
+      - name:  Installation des dépendances
         run: |
           if [ -f composer.json ]; then
             composer install --prefer-dist --no-progress
@@ -83,16 +70,16 @@ jobs:
             composer require --dev phpunit/phpunit ^10 --no-interaction
           fi
           
-      - name: 🧪 Exécution des tests PHPUnit
+      - name: Exécution des tests PHPUnit
         run: |
-          echo "🧪 Exécution des tests unitaires..."
+          echo " Exécution des tests unitaires..."
           if [ -d "tests" ]; then
             ./vendor/bin/phpunit --testdox --colors=always
           else
-            echo "⚠️ Aucun dossier tests/ trouvé"
+            echo " Aucun dossier tests/ trouvé"
           fi
           
-      - name: 📊 Rapport de couverture
+      - name:  Rapport de couverture
         if: success()
         run: |
           echo "📊 Génération du rapport de couverture..."
@@ -100,21 +87,19 @@ jobs:
             ./vendor/bin/phpunit --coverage-text || true
           fi
 
-  # ===========================================================================
-  # Job 3: Analyse SAST - SonarCloud
-  # ===========================================================================
+
   sonarcloud:
-    name: 🔒 SonarCloud SAST
+    name:  SonarCloud SAST
     runs-on: ubuntu-latest
     needs: php-lint
     
     steps:
-      - name: 📥 Checkout du code
+      - name:  Checkout du code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Nécessaire pour l'analyse SonarCloud
           
-      - name: 🔍 Analyse SonarCloud
+      - name:  Analyse SonarCloud
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -127,19 +112,19 @@ jobs:
             -Dsonar.exclusions=**/vendor/**,**/node_modules/**,**/assets/**
             -Dsonar.php.version=${{ env.PHP_VERSION }}
             
-      - name: 📋 Rapport SonarCloud
+      - name:  Rapport SonarCloud
         run: |
           echo "=============================================="
-          echo "📊 RAPPORT SONARCLOUD"
+          echo " RAPPORT SONARCLOUD"
           echo "=============================================="
           echo ""
-          echo "🔗 Dashboard du projet:"
+          echo " Dashboard du projet:"
           echo "   https://sonarcloud.io/project/overview?id=Ismail-khlif_miniprojet-DevOps"
           echo ""
-          echo "🐛 Issues détectées:"
+          echo " Issues détectées:"
           echo "   https://sonarcloud.io/project/issues?id=Ismail-khlif_miniprojet-DevOps"
           echo ""
-          echo "📈 Mesures de qualité:"
+          echo " Mesures de qualité:"
           echo "   https://sonarcloud.io/component_measures?id=Ismail-khlif_miniprojet-DevOps"
           echo ""
           echo "=============================================="
@@ -153,12 +138,12 @@ jobs:
     needs: php-lint
     
     steps:
-      - name: 📥 Checkout du code
+      - name: Checkout du code
         uses: actions/checkout@v4
         
-      - name: 🔍 Recherche de secrets exposés
+      - name: Recherche de secrets exposés
         run: |
-          echo "🔍 Recherche de secrets potentiellement exposés..."
+          echo "Recherche de secrets potentiellement exposés..."
           
           # Recherche de patterns sensibles
           FOUND=0
@@ -171,76 +156,76 @@ jobs:
           
           # Clés API
           if grep -rE "(api_key|apikey|secret_key|secretkey).*=.*['\"][^'\"]+['\"]" --include="*.php" . 2>/dev/null; then
-            echo "⚠️ Potentielles clés API détectées!"
+            echo "Potentielles clés API détectées!"
             FOUND=1
           fi
           
           if [ $FOUND -eq 0 ]; then
-            echo "✅ Aucun secret exposé détecté!"
+            echo "Aucun secret exposé détecté!"
           fi
           
-      - name: 🔒 Vérification des fonctions dangereuses
+      - name: Vérification des fonctions dangereuses
         run: |
-          echo "🔍 Recherche de fonctions PHP dangereuses..."
+          echo " Recherche de fonctions PHP dangereuses..."
           
           DANGEROUS_FUNCS="eval|exec|shell_exec|system|passthru|popen|proc_open"
           
           if grep -rE "($DANGEROUS_FUNCS)\s*\(" --include="*.php" . 2>/dev/null; then
-            echo "⚠️ Fonctions potentiellement dangereuses détectées!"
+            echo " Fonctions potentiellement dangereuses détectées!"
             echo "   Vérifiez que ces utilisations sont sécurisées."
           else
-            echo "✅ Aucune fonction dangereuse détectée!"
+            echo "Aucune fonction dangereuse détectée!"
           fi
           
-      - name: 🔐 Vérification injection SQL
+      - name:  Vérification injection SQL
         run: |
           echo "🔍 Recherche de potentielles injections SQL..."
           
           # Recherche de requêtes SQL avec concaténation directe
           if grep -rE "SELECT.*FROM.*WHERE.*\\\$" --include="*.php" . 2>/dev/null | grep -v "prepare"; then
-            echo "⚠️ Potentielles injections SQL détectées!"
+            echo " Potentielles injections SQL détectées!"
             echo "   Utilisez des requêtes préparées (PDO::prepare)"
           else
-            echo "✅ Pas de pattern d'injection SQL évident!"
+            echo " Pas de pattern d'injection SQL évident!"
           fi
           
-      - name: 📋 Résumé de sécurité
+      - name:  Résumé de sécurité
         run: |
           echo ""
           echo "=============================================="
-          echo "📋 RÉSUMÉ DES VÉRIFICATIONS DE SÉCURITÉ"
+          echo " RÉSUMÉ DES VÉRIFICATIONS DE SÉCURITÉ"
           echo "=============================================="
-          echo "✅ Vérifications effectuées:"
+          echo " Vérifications effectuées:"
           echo "   - Recherche de secrets exposés"
           echo "   - Vérification des fonctions dangereuses"
           echo "   - Détection de patterns d'injection SQL"
           echo ""
-          echo "💡 Pour une analyse DAST complète, utilisez OWASP ZAP"
+          echo "Pour une analyse DAST complète, utilisez OWASP ZAP"
           echo "=============================================="
 
   # ===========================================================================
   # Job 5: Résumé final du build
   # ===========================================================================
   build-summary:
-    name: 📊 Build Summary
+    name: Build Summary
     runs-on: ubuntu-latest
     needs: [php-lint, phpunit-tests, sonarcloud, security-check]
     if: always()
     
     steps:
-      - name: 📊 Résumé du pipeline
+      - name: Résumé du pipeline
         run: |
           echo "=============================================="
-          echo "📊 RÉSUMÉ DU PIPELINE CI/CD DEVSECOPS"
+          echo " RÉSUMÉ DU PIPELINE CI/CD DEVSECOPS"
           echo "=============================================="
           echo ""
-          echo "🔍 PHP Lint:        ${{ needs.php-lint.result }}"
-          echo "🧪 PHPUnit Tests:   ${{ needs.phpunit-tests.result }}"
-          echo "🔒 SonarCloud:      ${{ needs.sonarcloud.result }}"
-          echo "🛡️ Security Check:  ${{ needs.security-check.result }}"
+          echo " PHP Lint:        ${{ needs.php-lint.result }}"
+          echo " PHPUnit Tests:   ${{ needs.phpunit-tests.result }}"
+          echo " SonarCloud:      ${{ needs.sonarcloud.result }}"
+          echo " Security Check:  ${{ needs.security-check.result }}"
           echo ""
           echo "=============================================="
-          echo "📅 Date: $(date)"
-          echo "🔖 Commit: ${{ github.sha }}"
-          echo "👤 Auteur: ${{ github.actor }}"
+          echo " Date: $(date)"
+          echo " Commit: ${{ github.sha }}"
+          echo " Auteur: ${{ github.actor }}"
           echo "=============================================="
