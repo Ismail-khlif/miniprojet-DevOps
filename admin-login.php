@@ -5,12 +5,17 @@
    if($_SESSION['alogin']!=''){
 		$_SESSION['alogin']='';
    }
+   if (empty($_SESSION['csrf_token_admin_login'])) {
+       $_SESSION['csrf_token_admin_login'] = bin2hex(random_bytes(32));
+   }
    if(isset($_POST['login']))
    {
-	   $uname=$_POST['username'];
-	   $password=md5($_POST['password']);
+	   if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token_admin_login'], $_POST['csrf_token'])) {
+		   $_SESSION['msgErreur'] = "Votre session a expiré. Veuillez réessayer.";
+	   } else {
+		   $uname=$_POST['username'];
+		   $password=md5($_POST['password']);
 	   
-		// CORRIGÉ : Utilisation de requêtes préparées pour éviter l'injection SQL
 		$sql = "SELECT UserName, Password, is_admin FROM users WHERE UserName = :username AND Password = :password";
 		$query = $dbh->prepare($sql);
 		$query->bindParam(':username', $uname, PDO::PARAM_STR);
@@ -22,7 +27,7 @@
 				$_SESSION['alogin'] = $row['UserName'];
 				$_SESSION['is_admin'] = $row['is_admin'];
 				header('Location: dashboard.php');
-				exit(); // AJOUTÉ : Toujours mettre exit après header redirect
+				exit(); 
 		}
 	   else{
 		   $_SESSION['msgErreur'] = "Mauvais identifiant / mot de passe.";
@@ -94,6 +99,7 @@
 									<?php } ?>
                                     <div class="panel-body p-20">
                                        <form class="admin-login" method="post">
+                                          <input type="hidden" name="csrf_token" value="<?php echo htmlentities($_SESSION['csrf_token_admin_login']); ?>">
                                           <div class="form-group">
                                              <label for="inputUsername" class="control-label">Identifiant</label>
                                              <input type="text" name="username" class="form-control" id="inputUsername" placeholder="Identifiant">
