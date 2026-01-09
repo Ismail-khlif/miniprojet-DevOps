@@ -108,10 +108,10 @@ foreach($results as $result)
                                                             <td><?php echo htmlentities($result->ClassName);?>(<?php echo htmlentities($result->Section);?>)</td>
                                                             <td><?php echo htmlentities($result->RegDate);?></td>
                                                              <td><?php if($result->Status==1){
-echo htmlentities('Active';
+echo htmlentities('Active');
 }
 else{
-   echo htmlentities('Blocked'; 
+   echo htmlentities('Blocked'); 
 }
                                                                 ?></td>
 <td>
