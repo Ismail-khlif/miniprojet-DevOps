@@ -28,14 +28,11 @@ jobs:
         run: |
           find . -name "*.php" -not -path "./includes/config.php" -print0 | xargs -0 -n1 php -l
 
-
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
 
       - name: Run PHPUnit tests
-        run: |
-          ./vendor/bin/phpunit --testdox --colors=always
-
-
-
+        run: ./vendor/bin/phpunit --testdox --colors=always
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
@@ -45,9 +42,9 @@ jobs:
           args: >
             -Dsonar.projectKey=Ismail-khlif_miniprojet-DevOps
             -Dsonar.organization=ismail-khlif
-
-
-
+            -Dsonar.sources=.
+            -Dsonar.exclusions=tests/**,vendor/**
+            -Dsonar.tests=tests
 
       - name: SonarCloud Report Link
         run: |
