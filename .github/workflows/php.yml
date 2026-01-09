@@ -38,14 +38,11 @@ jobs:
 
       - name: SonarCloud Report Link
         run: |
-          echo "=============================================="
-          echo "📊 SONARCLOUD REPORT"
-          echo "=============================================="
+          echo "SONARCLOUD REPORT"
           echo ""
-          echo "🔗 Issues (Vulnerabilities, Bugs, Code Smells):"
+          echo "Issues (Vulnerabilities, Bugs, Code Smells)"
           echo "https://sonarcloud.io/project/issues?id=Ismail-khlif_miniprojet-DevOps"
           echo ""
           echo "📋 Project Overview:"
           echo "https://sonarcloud.io/project/overview?id=Ismail-khlif_miniprojet-DevOps"
           echo ""
-          echo "=============================================="
