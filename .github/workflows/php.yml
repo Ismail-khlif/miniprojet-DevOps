@@ -2,9 +2,9 @@ name: PHP
 
 on:
   push:
-    branches: [ "OWASP_ZAP_Correction" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "OWASP_ZAP_Correction" ]
+    branches: [ "main" ]
 
 permissions:
   contents: read
