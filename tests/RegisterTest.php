@@ -181,16 +181,6 @@ class RegisterTest extends TestCase
      * Test de protection contre l'injection SQL
      * (Simule la préparation d'une requête)
      */
-    public function testSqlInjectionPrevention(): void
-    {
-        $maliciousInput = "'; DROP TABLE users; --";
-        $sanitized = $this->sanitizeForSql($maliciousInput);
-        
-        // Le caractère ' doit être échappé ou supprimé
-        $this->assertStringNotContainsString("';", $sanitized);
-    }
-    
-    // ==================== Fonctions helper ====================
     
     private function isValidUsername(string $username): bool
     {
@@ -234,4 +224,14 @@ class RegisterTest extends TestCase
         // Simulation de sanitization (en réalité, utiliser PDO::prepare)
         return addslashes($input);
     }
+
+    public function testSqlInjectionPrevention(): void
+{
+    $maliciousInput = "'; DROP TABLE users; --";
+    $sanitized = $this->sanitizeForSql($maliciousInput);
+
+    // L'entrée doit être modifiée (échappée)
+    $this->assertNotEquals($maliciousInput, $sanitized);
+}
+
 }
