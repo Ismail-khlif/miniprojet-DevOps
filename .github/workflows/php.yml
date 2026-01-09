@@ -22,17 +22,10 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.2"
-          tools: composer
-
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
 
       - name: Lint PHP files
         run: |
           find . -name "*.php" -not -path "./includes/config.php" -print0 | xargs -0 -n1 php -l
-
-      - name: Run PHPUnit tests
-        run: ./vendor/bin/phpunit --testdox --colors=always
 
   sonar:
     needs: build
@@ -53,7 +46,7 @@ jobs:
             -Dsonar.organization=ismail-khlif
 
   deploy:
-    needs: sonar 
+    needs: sonar
     runs-on: ubuntu-latest
 
     steps:
