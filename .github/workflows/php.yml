@@ -1,4 +1,4 @@
-name: PHP + SonarCloud
+name: PHP
 
 on:
   push:
@@ -22,21 +22,9 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.2"
-          tools: composer
-
-      - name: Validate composer.json and composer.lock
-        run: composer validate --strict
-
-      - name: Cache Composer packages
-        uses: actions/cache@v3
-        with:
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-php-
-
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
+      - name: Lint PHP files
+        run: |
+          find . -name "*.php" -print0 | xargs -0 -n1 php -l
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
