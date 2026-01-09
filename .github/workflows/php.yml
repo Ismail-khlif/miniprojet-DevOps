@@ -1,10 +1,10 @@
-name: PHP
+name: CI/CD PHP
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 permissions:
   contents: read
@@ -24,12 +24,24 @@ jobs:
           php-version: "8.2"
           tools: composer
 
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
       - name: Lint PHP files
         run: |
           find . -name "*.php" -not -path "./includes/config.php" -print0 | xargs -0 -n1 php -l
 
-       - name: Run PHPUnit tests
+      - name: Run PHPUnit tests
         run: ./vendor/bin/phpunit --testdox --colors=always
+
+  sonar:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
@@ -39,16 +51,12 @@ jobs:
           args: >
             -Dsonar.projectKey=Ismail-khlif_miniprojet-DevOps
             -Dsonar.organization=ismail-khlif
-            -Dsonar.sources=.
-            -Dsonar.exclusions=tests/**,vendor/**
-            -Dsonar.tests=tests
 
-      - name: SonarCloud Report Link
+  deploy:
+    needs: sonar 
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Render Deploy
         run: |
-          echo "SONARCLOUD REPORT"
-          echo ""
-          echo "Issues:"
-          echo "https://sonarcloud.io/project/issues?id=Ismail-khlif_miniprojet-DevOps"
-          echo ""
-          echo "Project Overview:"
-          echo "https://sonarcloud.io/project/overview?id=Ismail-khlif_miniprojet-DevOps"
+          curl -X POST "https://api.render.com/deploy/srv-d5dobjmuk2gs73944f6g?key=AbCDeFGhIjKlmNOP"
