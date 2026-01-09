@@ -34,3 +34,9 @@ jobs:
           args: >
             -Dsonar.projectKey=Ismail-khlif_miniprojet-DevOps
             -Dsonar.organization=ismail-khlif
+      - name: Add SonarCloud link to summary
+        run: |
+          echo "### SonarCloud report" >> $GITHUB_STEP_SUMMARY
+          echo "https://sonarcloud.io/project/overview?id=Ismail-khlif_miniprojet-DevOps" >> $GITHUB_STEP_SUMMARY
+
+
