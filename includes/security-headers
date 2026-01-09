@@ -1,0 +1,82 @@
+<?php
+
+header('X-Frame-Options: DENY');
+
+header('X-Content-Type-Options: nosniff');
+
+header('X-XSS-Protection: 1; mode=block');
+
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; img-src 'self' data:; font-src 'self' https://cdnjs.cloudflare.com;");
+
+header('Referrer-Policy: strict-origin-when-cross-origin');
+
+header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
+
+header_remove('X-Powered-By');
+
+if (session_status() === PHP_SESSION_ACTIVE) {
+    $cookieParams = [
+        'lifetime' => 0,
+        'path' => '/',
+        'domain' => '',
+        'secure' => isset($_SERVER['HTTPS']), // true si HTTPS
+        'httponly' => true,
+        'samesite' => 'Strict'
+    ];
+    
+    session_set_cookie_params($cookieParams);
+}
+
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_samesite', 'Strict');
+ini_set('session.use_strict_mode', 1);
+ini_set('session.use_only_cookies', 1);
+
+
+function generateCsrfToken(): string {
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+
+function validateCsrfToken(string $token): bool {
+    if (empty($_SESSION['csrf_token'])) {
+        return false;
+    }
+    return hash_equals($_SESSION['csrf_token'], $token);
+}
+
+
+function regenerateCsrfToken(): string {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    return $_SESSION['csrf_token'];
+}
+
+function escapeHtml(string $string): string {
+    return htmlspecialchars($string, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+}
+
+function isValidEmail(string $email): bool {
+    return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+}
+
+function validatePassword(string $password): array {
+    $errors = [];
+    
+    if (strlen($password) < 8) {
+        $errors[] = "Le mot de passe doit contenir au moins 8 caractères.";
+    }
+    if (!preg_match('/[A-Z]/', $password)) {
+        $errors[] = "Le mot de passe doit contenir au moins une majuscule.";
+    }
+    if (!preg_match('/[a-z]/', $password)) {
+        $errors[] = "Le mot de passe doit contenir au moins une minuscule.";
+    }
+    if (!preg_match('/[0-9]/', $password)) {
+        $errors[] = "Le mot de passe doit contenir au moins un chiffre.";
+    }
+    
+    return $errors;
+}
+?>
