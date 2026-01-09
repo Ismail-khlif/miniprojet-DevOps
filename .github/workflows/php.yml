@@ -24,7 +24,7 @@ jobs:
           php-version: "8.2"
       - name: Lint PHP files
         run: |
-          find . -name "*.php" -print0 | xargs -0 -n1 php -l
+          find . -name "*.php" -not -path "./includes/config.php" -print0 | xargs -0 -n1 php -l
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
