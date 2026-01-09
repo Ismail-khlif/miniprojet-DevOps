@@ -22,6 +22,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.2"
+
       - name: Lint PHP files
         run: |
           find . -name "*.php" -not -path "./includes/config.php" -print0 | xargs -0 -n1 php -l
@@ -34,9 +35,17 @@ jobs:
           args: >
             -Dsonar.projectKey=Ismail-khlif_miniprojet-DevOps
             -Dsonar.organization=ismail-khlif
-      - name: Add SonarCloud link to summary
+
+      - name: SonarCloud Report Link
         run: |
-          echo "### SonarCloud report" >> $GITHUB_STEP_SUMMARY
-          echo "https://sonarcloud.io/project/overview?id=Ismail-khlif_miniprojet-DevOps" >> $GITHUB_STEP_SUMMARY
-
-
+          echo "=============================================="
+          echo "📊 SONARCLOUD REPORT"
+          echo "=============================================="
+          echo ""
+          echo "🔗 Issues (Vulnerabilities, Bugs, Code Smells):"
+          echo "https://sonarcloud.io/project/issues?id=Ismail-khlif_miniprojet-DevOps"
+          echo ""
+          echo "📋 Project Overview:"
+          echo "https://sonarcloud.io/project/overview?id=Ismail-khlif_miniprojet-DevOps"
+          echo ""
+          echo "=============================================="
