@@ -22,10 +22,18 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.2"
+          tools: composer
+
+      - name: Install dependencies
+        run: composer install --no-progress --no-interaction --prefer-dist
 
       - name: Lint PHP files
         run: |
           find . -name "*.php" -not -path "./includes/config.php" -print0 | xargs -0 -n1 php -l
+
+      - name: Run PHPUnit tests
+        run: |
+          ./vendor/bin/phpunit --testdox --colors=always
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
@@ -40,9 +48,8 @@ jobs:
         run: |
           echo "SONARCLOUD REPORT"
           echo ""
-          echo "Issues (Vulnerabilities, Bugs, Code Smells)"
+          echo "Issues:"
           echo "https://sonarcloud.io/project/issues?id=Ismail-khlif_miniprojet-DevOps"
           echo ""
-          echo "📋 Project Overview:"
+          echo "Project Overview:"
           echo "https://sonarcloud.io/project/overview?id=Ismail-khlif_miniprojet-DevOps"
-          echo ""
