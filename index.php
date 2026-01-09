@@ -263,7 +263,7 @@ foreach($results as $result)
         <!-- copyright -->
         <section class="w3l-copyright text-center">
           <div class="container">
-            <p class="copy-footer-29">Copyright &copy; Gestion des résultats des étudiants <?php echo date('Y';?></p>
+            <p class="copy-footer-29">Copyright &copy; Gestion des résultats des étudiants <?php echo date('Y');?></p>
           </div>
       </section>
       </footer>
