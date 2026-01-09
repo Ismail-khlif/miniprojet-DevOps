@@ -2,9 +2,9 @@ name: CI/CD DevSecOps Pipeline
 
 on:
   push:
-    branches: [ main, master, develop ]
+    branches: [ Sonar_Correct ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ Sonar_Correct ]
   workflow_dispatch:
 
 env:
