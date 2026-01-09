@@ -2,9 +2,9 @@ name: PHP
 
 on:
   push:
-    branches: [ "Sonar_Correct" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "Sonar_Correct" ]
+    branches: [ "main" ]
 
 permissions:
   contents: read
