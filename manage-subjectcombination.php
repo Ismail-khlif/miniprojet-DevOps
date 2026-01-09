@@ -128,20 +128,20 @@ foreach($results as $result)
                                                              <td><?php $stts=$result->status;
 if($stts=='0')
 {
-	echo htmlentities('Inactive';
+	echo htmlentities('Inactive');
 }
 else
 {
-	echo htmlentities('Active';
+	echo htmlentities('Active');
 }
                                                              ?></td>
                                                             
 <td>
 <?php if($stts=='0')
 { ?>
-<a href="manage-subjectcombination.php?acid=<?php echo htmlentities($result->scid);?>" onclick="confirm('voulez-vous vraiment activer ce cours';" class="btn btn-success"><i class="fa fa-check" title="Acticvate Record"></i> </a><?php } else {?>
+<a href="manage-subjectcombination.php?acid=<?php echo htmlentities($result->scid);?>" onclick="confirm('voulez-vous vraiment activer ce cours');" class="btn btn-success"><i class="fa fa-check" title="Acticvate Record"></i> </a><?php } else {?>
 
-<a href="manage-subjectcombination.php?did=<?php echo htmlentities($result->scid);?>"  class="btn btn-danger" onclick="confirm('voulez-vous vraiment désactiver ce cours';"><i class="fa fa-times" title="Deactivate Record"></i> </a>
+<a href="manage-subjectcombination.php?did=<?php echo htmlentities($result->scid);?>"  class="btn btn-danger" onclick="confirm('voulez-vous vraiment désactiver ce cours');"><i class="fa fa-times" title="Deactivate Record"></i> </a>
 <?php }?>
 </td>
 </tr>
