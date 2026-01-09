@@ -173,10 +173,10 @@ foreach($results as $result)
                                                             <td><?php echo htmlentities($result->note);?></td>
                                                             <td><?php echo htmlentities($result->RegDate);?></td>
                                                              <td><?php if($result->Status==1){
-echo htmlentities('Activé';
+echo htmlentities('Activé');
 }
 else{
-   echo htmlentities('Bloqué'; 
+   echo htmlentities('Bloqué'); 
 }
                                                                 ?></td>
 </tr>
