@@ -1,7 +1,7 @@
 <?php
 session_start();
 error_reporting(0);
-include('includes/config.php');
+include 'includes/config.php';
 if(isset($_SESSION['login']))    {   
     header("Location: index.php"); 
     }
@@ -45,10 +45,10 @@ return true;
 }
 </script>
 
-            <?php include('includes/topbar.php');?>   
+            <?php include 'includes/topbar.php';?>   
             <div class="content-wrapper">
                 <div class="content-container">
-<?php include('includes/leftbar.php');?>                   
+<?php include 'includes/leftbar.php';?>                   
  <!-- /.left-sidebar -->
 
                     <div class="main-page">
@@ -101,24 +101,24 @@ else if($error){?>
   
                                             <div class="panel-body">
 
-                                                <form  name="chngpwd" method="post" \ onSubmit="return valid();">
+                                                <form  name="chngpwd" method="post" onSubmit="return valid();">
                                                     <div class="form-group has-success">
-                                                        <label for="success" class="control-label">Current Password</label>
+                                                        <label for="currentPassword" class="control-label">Current Password</label>
                                                 		<div class="">
-                                    <input type="password" name="password" class="form-control" required="required" id="success">
+                                    <input type="password" name="password" class="form-control" required="required" id="currentPassword">
                                                       
                                                 		</div>
                                                 	</div>
                                                        <div class="form-group has-success">
-                                                        <label for="success" class="control-label">New Password</label>
+                                                        <label for="newPassword" class="control-label">New Password</label>
                                                         <div class="">
-                                                            <input type="password" name="newpassword" required="required" class="form-control" id="success">
+                                                            <input type="password" name="newpassword" required="required" class="form-control" id="newPassword">
                                                         </div>
                                                     </div>
                                                      <div class="form-group has-success">
-                                                        <label for="success" class="control-label">Confirm Password</label>
+                                                        <label for="confirmPassword" class="control-label">Confirm Password</label>
                                                         <div class="">
-                                                            <input type="password" name="confirmpassword" class="form-control" required="required" id="success">
+                                                            <input type="password" name="confirmpassword" class="form-control" required="required" id="confirmPassword">
                                                         </div>
                                                     </div>
   <div class="form-group has-success">
@@ -154,6 +154,6 @@ else if($error){?>
                 <!-- /.content-container -->
             </div>
             <!-- /.content-wrapper -->
-<?php include('includes/footer.php');?>
+<?php include 'includes/footer.php';?>
  
 <?php  } ?>

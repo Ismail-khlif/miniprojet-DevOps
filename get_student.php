@@ -1,5 +1,5 @@
 <?php
-include('includes/config.php');
+include 'includes/config.php';
 if(!empty($_POST["classid"])) 
 {
  $cid=intval($_POST['classid']);

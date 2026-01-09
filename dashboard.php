@@ -1,16 +1,16 @@
 <?php
 session_start();
 error_reporting(0);
-include('includes/config.php');
+include 'includes/config.php';
 if(isset($_SESSION['login'])){   header("Location: index.php"); }else{
 ?>
 
 
-              <?php include('includes/topbar.php');?>
+              <?php include 'includes/topbar.php';?>
             <div class="content-wrapper">
                 <div class="content-container">
 
-                    <?php include('includes/leftbar.php');?>  
+                    <?php include 'includes/leftbar.php';?>  
 
                     <div class="main-page">
                         <div class="container-fluid">
@@ -223,6 +223,6 @@ else{
             </div>
             <!-- /.content-wrapper -->
 
-    <?php include('includes/footer.php');?>
+    <?php include 'includes/footer.php';?>
 
 <?php } ?>

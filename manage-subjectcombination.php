@@ -2,7 +2,7 @@
 <?php
 session_start();
 error_reporting(0);
-include('includes/config.php');
+include 'includes/config.php';
 if(isset($_SESSION['login']))    {   
     header("Location: index.php"); 
     }
@@ -36,11 +36,11 @@ $msg="Subject Deactivate successfully";
 
 <link rel="stylesheet" type="text/css" href="assets/js/DataTables/datatables.min.css"/>
             <!-- ========== TOP NAVBAR ========== -->
-   <?php include('includes/topbar.php');?> 
+   <?php include 'includes/topbar.php';?> 
             <!-- ========== WRAPPER FOR BOTH SIDEBARS & MAIN CONTENT ========== -->
             <div class="content-wrapper">
                 <div class="content-container">
-<?php include('includes/leftbar.php');?>  
+<?php include 'includes/leftbar.php';?>  
 
                     <div class="main-page">
                         <div class="container-fluid">
@@ -184,7 +184,7 @@ else
                 <!-- /.content-container -->
             </div>
             <!-- /.content-wrapper -->
-<?php include('includes/footer.php');?>
+<?php include 'includes/footer.php';?>
 
 <?php } ?>
 

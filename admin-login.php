@@ -1,7 +1,7 @@
 <?php
    session_start();
    error_reporting(1);
-   include('includes/config.php');
+   include 'includes/config.php';
    if($_SESSION['alogin']!=''){
 		$_SESSION['alogin']='';
    }
@@ -16,20 +16,22 @@
 		   $uname=$_POST['username'];
 		   $password=md5($_POST['password']);
 	   
-			$sql ="SELECT UserName,Password, is_admin FROM users WHERE UserName='$uname' and Password='$password'";
-			$result = $dbh1->query($sql);
-
-			if ($result->num_rows > 0) {
-					while($row = $result->fetch_array()) {
-					 $_SESSION['alogin']=$row[0];
-					 $_SESSION['is_admin']=$row[2];
-					}
-					header('Location: dashboard.php');
-			}
-		   else{
-			   $_SESSION['msgErreur'] = "Mauvais identifiant / mot de passe.";
-		   
-		   }
+		$sql = "SELECT UserName, Password, is_admin FROM users WHERE UserName = :username AND Password = :password";
+		$query = $dbh->prepare($sql);
+		$query->bindParam(':username', $uname, PDO::PARAM_STR);
+		$query->bindParam(':password', $password, PDO::PARAM_STR);
+		$query->execute();
+		
+		if ($query->rowCount() > 0) {
+				$row = $query->fetch(PDO::FETCH_ASSOC);
+				$_SESSION['alogin'] = $row['UserName'];
+				$_SESSION['is_admin'] = $row['is_admin'];
+				header('Location: dashboard.php');
+				exit(); 
+		}
+	   else{
+		   $_SESSION['msgErreur'] = "Mauvais identifiant / mot de passe.";
+	   
 	   }
    
    }
@@ -99,12 +101,12 @@
                                        <form class="admin-login" method="post">
                                           <input type="hidden" name="csrf_token" value="<?php echo htmlentities($_SESSION['csrf_token_admin_login']); ?>">
                                           <div class="form-group">
-                                             <label for="inputEmail3" class="control-label">Identifiant</label>
-                                             <input type="text" name="username" class="form-control" id="inputEmail3" placeholder="Identifiant">
+                                             <label for="inputUsername" class="control-label">Identifiant</label>
+                                             <input type="text" name="username" class="form-control" id="inputUsername" placeholder="Identifiant">
                                           </div>
                                           <div class="form-group">
-                                             <label for="inputPassword3" class="control-label">Mot de passe</label>
-                                             <input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Mot de passe">
+                                             <label for="inputPassword" class="control-label">Mot de passe</label>
+                                             <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Mot de passe">
                                           </div><br>
                                           <div class="form-group mt-20">
                                                 <button type="submit" name="login" class="btn login-btn">Se Connecter</button>
