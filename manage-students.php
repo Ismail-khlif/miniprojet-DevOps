@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 error_reporting(0);
@@ -115,10 +114,10 @@ foreach($results as $result)
                                                             <td><?php echo htmlentities($result->RegDate);?></td>
                                                             <td><?php echo htmlentities($result->note);?></td>
                                                              <td><?php if($result->Status==1){
-echo htmlentities('Active';
+echo htmlentities('Active');
 }
 else{
-   echo htmlentities('Blocked'; 
+   echo htmlentities('Blocked'); 
 }
                                                                 ?></td>
 <td>
@@ -169,5 +168,3 @@ else{
 
         
 <?php } ?>
-
-s
