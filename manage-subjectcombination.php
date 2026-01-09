@@ -2,7 +2,7 @@
 <?php
 session_start();
 error_reporting(0);
-include('includes/config.php');
+include 'includes/config.php';
 if(isset($_SESSION['login']))    {   
     header("Location: index.php"); 
     }
@@ -36,11 +36,11 @@ $msg="Subject Deactivate successfully";
 
 <link rel="stylesheet" type="text/css" href="assets/js/DataTables/datatables.min.css"/>
             <!-- ========== TOP NAVBAR ========== -->
-   <?php include('includes/topbar.php');?> 
+   <?php include 'includes/topbar.php';?> 
             <!-- ========== WRAPPER FOR BOTH SIDEBARS & MAIN CONTENT ========== -->
             <div class="content-wrapper">
                 <div class="content-container">
-<?php include('includes/leftbar.php');?>  
+<?php include 'includes/leftbar.php';?>  
 
                     <div class="main-page">
                         <div class="container-fluid">
@@ -128,20 +128,20 @@ foreach($results as $result)
                                                              <td><?php $stts=$result->status;
 if($stts=='0')
 {
-	echo htmlentities('Inactive');
+	echo htmlentities('Inactive';
 }
 else
 {
-	echo htmlentities('Active');
+	echo htmlentities('Active';
 }
                                                              ?></td>
                                                             
 <td>
 <?php if($stts=='0')
 { ?>
-<a href="manage-subjectcombination.php?acid=<?php echo htmlentities($result->scid);?>" onclick="confirm('voulez-vous vraiment activer ce cours');" class="btn btn-success"><i class="fa fa-check" title="Acticvate Record"></i> </a><?php } else {?>
+<a href="manage-subjectcombination.php?acid=<?php echo htmlentities($result->scid);?>" onclick="confirm('voulez-vous vraiment activer ce cours';" class="btn btn-success"><i class="fa fa-check" title="Acticvate Record"></i> </a><?php } else {?>
 
-<a href="manage-subjectcombination.php?did=<?php echo htmlentities($result->scid);?>"  class="btn btn-danger" onclick="confirm('voulez-vous vraiment désactiver ce cours');"><i class="fa fa-times" title="Deactivate Record"></i> </a>
+<a href="manage-subjectcombination.php?did=<?php echo htmlentities($result->scid);?>"  class="btn btn-danger" onclick="confirm('voulez-vous vraiment désactiver ce cours';"><i class="fa fa-times" title="Deactivate Record"></i> </a>
 <?php }?>
 </td>
 </tr>
@@ -184,7 +184,7 @@ else
                 <!-- /.content-container -->
             </div>
             <!-- /.content-wrapper -->
-<?php include('includes/footer.php');?>
+<?php include 'includes/footer.php';?>
 
 <?php } ?>
 
