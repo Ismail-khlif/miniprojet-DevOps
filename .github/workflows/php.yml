@@ -1,4 +1,4 @@
-name: PHP CI (No Composer)
+name: PHP
 
 on:
   push:
@@ -14,26 +14,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.2"
+          tools: composer
 
-      - name: Download PHPUnit
+      - name: Lint PHP files
         run: |
-          wget https://phar.phpunit.de/phpunit-10.phar
-          chmod +x phpunit-10.phar
-          php phpunit-10.phar --version
+          find . -name "*.php" -not -path "./includes/config.php" -print0 | xargs -0 -n1 php -l
 
-      - name: PHP Lint
-        run: |
-          find . -name "*.php" -not -path "./vendor/*" -print0 | xargs -0 -n1 php -l
+
 
       - name: Run PHPUnit tests
-        run: php phpunit-10.phar --testdox --colors=always
+        run: |
+          ./vendor/bin/phpunit --testdox --colors=always
+
+
+
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
@@ -43,9 +45,9 @@ jobs:
           args: >
             -Dsonar.projectKey=Ismail-khlif_miniprojet-DevOps
             -Dsonar.organization=ismail-khlif
-            -Dsonar.sources=.
-            -Dsonar.tests=tests
-            -Dsonar.language=php
+
+
+
 
       - name: SonarCloud Report Link
         run: |
