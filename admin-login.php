@@ -5,24 +5,31 @@
    if($_SESSION['alogin']!=''){
 		$_SESSION['alogin']='';
    }
+   if (empty($_SESSION['csrf_token_admin_login'])) {
+       $_SESSION['csrf_token_admin_login'] = bin2hex(random_bytes(32));
+   }
    if(isset($_POST['login']))
    {
-	   $uname=$_POST['username'];
-	   $password=md5($_POST['password']);
+	   if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token_admin_login'], $_POST['csrf_token'])) {
+		   $_SESSION['msgErreur'] = "Votre session a expiré. Veuillez réessayer.";
+	   } else {
+		   $uname=$_POST['username'];
+		   $password=md5($_POST['password']);
 	   
-		$sql ="SELECT UserName,Password, is_admin FROM users WHERE UserName='$uname' and Password='$password'";
-		$result = $dbh1->query($sql);
+			$sql ="SELECT UserName,Password, is_admin FROM users WHERE UserName='$uname' and Password='$password'";
+			$result = $dbh1->query($sql);
 
-		if ($result->num_rows > 0) {
-				while($row = $result->fetch_array()) {
-				 $_SESSION['alogin']=$row[0];
-				 $_SESSION['is_admin']=$row[2];
-				}
-				header('Location: dashboard.php');
-		}
-	   else{
-		   $_SESSION['msgErreur'] = "Mauvais identifiant / mot de passe.";
-	   
+			if ($result->num_rows > 0) {
+					while($row = $result->fetch_array()) {
+					 $_SESSION['alogin']=$row[0];
+					 $_SESSION['is_admin']=$row[2];
+					}
+					header('Location: dashboard.php');
+			}
+		   else{
+			   $_SESSION['msgErreur'] = "Mauvais identifiant / mot de passe.";
+		   
+		   }
 	   }
    
    }
@@ -90,6 +97,7 @@
 									<?php } ?>
                                     <div class="panel-body p-20">
                                        <form class="admin-login" method="post">
+                                          <input type="hidden" name="csrf_token" value="<?php echo htmlentities($_SESSION['csrf_token_admin_login']); ?>">
                                           <div class="form-group">
                                              <label for="inputEmail3" class="control-label">Identifiant</label>
                                              <input type="text" name="username" class="form-control" id="inputEmail3" placeholder="Identifiant">
