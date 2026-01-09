@@ -1,7 +1,11 @@
 <?php
 session_start();
 //error_reporting(0);
-include 'includes/config.php';?>
+include('includes/config.php');
+if (empty($_SESSION['csrf_token_result_lookup'])) {
+    $_SESSION['csrf_token_result_lookup'] = bin2hex(random_bytes(32));
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -45,6 +49,7 @@ include 'includes/config.php';?>
                            
 
                                 <form action="result.php" method="post" class="admin-login">
+                                    <input type="hidden" name="csrf_token" value="<?php echo htmlentities($_SESSION['csrf_token_result_lookup']); ?>">
                                 	<div class="form-group">
                                 		<label for="rollid" class="control-label">Entrez votre numéro</label>
                                         <input type="text" class="form-control" id="rollid" placeholder="Entrez votre numéro" autocomplete="off" name="rollid">

@@ -2,6 +2,15 @@
 session_start();
 error_reporting(0);
 include('includes/config.php');
+$csrfError = null;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_POST['csrf_token'], $_SESSION['csrf_token_result_lookup']) ||
+        !hash_equals($_SESSION['csrf_token_result_lookup'], $_POST['csrf_token'])) {
+        $csrfError = "Votre session a expiré. Veuillez réessayer.";
+    }
+} else {
+    $csrfError = "Requête invalide.";
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,6 +62,12 @@ include('includes/config.php');
                                                     <h3 align="center">Note étudiant</h3>
                                                     <hr />
 <?php
+if ($csrfError) { ?>
+<div class="alert alert-danger left-icon-alert" role="alert">
+    <strong>Erreur!</strong> <?php echo htmlentities($csrfError); ?>
+</div>
+<?php
+} else {
 // code Student Data
 $rollid=$_POST['rollid'];
 $classid=$_POST['class'];
@@ -153,6 +168,7 @@ echo htmlentities("Invalid Roll Id");
  }
 ?>
                                         </div>
+<?php } ?>
 
 
 
