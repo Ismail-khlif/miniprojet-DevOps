@@ -44,6 +44,16 @@ jobs:
           args: >
             -Dsonar.projectKey=Ismail-khlif_miniprojet-DevOps
             -Dsonar.organization=ismail-khlif
+      - name: SonarCloud Report Link
+        run: |
+          echo "SONARCLOUD REPORT"
+          echo ""
+          echo "Issues (Vulnerabilities, Bugs, Code Smells)"
+          echo "https://sonarcloud.io/project/issues?id=Ismail-khlif_miniprojet-DevOps"
+          echo ""
+          echo "📋 Project Overview:"
+          echo "https://sonarcloud.io/project/overview?id=Ismail-khlif_miniprojet-DevOps"
+          echo ""
 
   deploy:
     needs: sonar
